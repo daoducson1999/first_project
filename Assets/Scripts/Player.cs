@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public int level = 10;
     void Start()
     {
         Debug.Log("Player Started!");
+        Debug.Log("Level: " + level);
     }
 
     // Update is called once per frame
