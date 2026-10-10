@@ -13,10 +13,24 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField]
     private float attackCooldown = 0.5f;
     private float nextAttackTime;
+    [SerializeField]
+    private LineRenderer attackCircle;
+    [SerializeField]
+    private int circleSegments = 60;
+    [SerializeField]
+    private float attackPointDistance = 1f;
+    private Vector2 lastMoveDirection = Vector2.right;
+
+    private void Start()
+    {
+        DrawAttackCircle();
+    }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && Time.time >= nextAttackTime)
+        UpdateAttackDirection();
+
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= nextAttackTime)
         {
             Attack();
             nextAttackTime = Time.time + attackCooldown;
@@ -31,27 +45,70 @@ public class PlayerCombat : MonoBehaviour
             enemyLayer
         );
 
-        foreach(Collider2D hit in hits)
+        foreach (Collider2D hit in hits)
         {
             EnemyHealth enemyHealth = hit.GetComponent<EnemyHealth>();
-            if(enemyHealth != null)
+            if (enemyHealth != null)
             {
-                enemyHealth.takeDamage(attackDamage);
+                enemyHealth.takeDamage(attackDamage, transform.position);
             }
         }
     }
 
     private void OnDrawGizmosSelected()
     {
-        if(attackPoint == null)
+        if (attackPoint == null)
         {
             return;
         }
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere( 
+        Gizmos.DrawWireSphere(
             attackPoint.position,
             attackRange
         );
+    }
+
+    private void DrawAttackCircle()
+    {
+        if (attackCircle == null)
+            return;
+
+        attackCircle.useWorldSpace = false;
+        attackCircle.loop = true;
+        attackCircle.positionCount = circleSegments;
+        attackCircle.startWidth = 0.03f;
+        attackCircle.endWidth = 0.03f;
+
+        for (int i = 0; i < circleSegments; i++)
+        {
+            float angle = i * Mathf.PI * 2f / circleSegments;
+
+            float x = Mathf.Cos(angle) * attackRange;
+            float y = Mathf.Sin(angle) * attackRange;
+
+            attackCircle.SetPosition(
+            i,
+            new Vector3(x, y, 0)
+            );
+        }
+    }
+
+    private void UpdateAttackDirection()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+
+        Vector2 moveDirection = new Vector2(
+            horizontal,
+            vertical
+        );
+
+        if(moveDirection != Vector2.zero)
+        {
+            lastMoveDirection = moveDirection.normalized;
+        }
+
+        attackPoint.localPosition = (Vector3)(lastMoveDirection * attackPointDistance);
     }
 }
