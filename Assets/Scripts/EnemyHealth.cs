@@ -3,6 +3,10 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField]
+    private int scoreReward = 20;
+    [SerializeField]
+    private GameScore gameScore;
+    [SerializeField]
     private int maxHealth = 50;
     [SerializeField]
     private float KnockbackForce = 5f;
@@ -60,9 +64,24 @@ public class EnemyHealth : MonoBehaviour
             ForceMode2D.Impulse
         );
     }
-    public void Die()
+    // public void Die()
+    // {
+    //     Destroy(gameObject);
+    //     enemySpawner.SpawnEnemy();
+    // }
+
+    private void Die()
     {
+        if(gameScore != null)
+        {
+            gameScore.AddScore(scoreReward);
+        }
+
+        if(enemySpawner != null)
+        {
+            enemySpawner.SpawnEnemy();
+        }
+
         Destroy(gameObject);
-        enemySpawner.SpawnEnemy();
     }
 }

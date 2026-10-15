@@ -1,9 +1,16 @@
+using System.Drawing;
 using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    // [SerializeField]
-    // private int attackDamage = 10;
+    [SerializeField]
+    private GameScore gameScore;
+    private PlayerInventory playerInventory;
+
+    private void Awake()
+    {
+        playerInventory = GetComponent<PlayerInventory>();
+    }
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
@@ -22,10 +29,28 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Coin"))
+        if(!collision.CompareTag("Coin"))
         {
-            Destroy(collision.gameObject);
-            Debug.Log("You received a Coin!");
+            return;
         }
+
+        if(playerInventory == null || gameScore == null)
+        {
+            return;
+        }
+        string coinName = collision.gameObject.name.Trim();
+
+        var points = coinName switch
+        {
+            "BronzeCoin" => 1,
+            "SilverCoin" => 5,
+            "GoldCoin" => 10,
+            _ => 1,
+        };
+        
+        playerInventory.AddCoin(1);
+        gameScore.AddScore(points);
+
+        Destroy(collision.gameObject);
     }
 }
