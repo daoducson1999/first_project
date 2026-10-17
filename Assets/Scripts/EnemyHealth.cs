@@ -21,14 +21,15 @@ public class EnemyHealth : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
-        enemySpawner = FindFirstObjectByType<EnemySpawner>();
+        //enemySpawner = FindFirstObjectByType<EnemySpawner>();
+        gameScore = FindAnyObjectByType<GameScore>();
         rb = GetComponent<Rigidbody2D>();
         enemyMovement = GetComponent<EnemyMovement>();
     }
 
     public void takeDamage(int damage, Vector2 attackerPosition)
     {
-        if(damage <= 0)
+        if (damage <= 0)
         {
             return;
         }
@@ -36,7 +37,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = Mathf.Max(currentHealth - damage, 0);
         Debug.Log("Enemy Health: " + currentHealth);
 
-        if(currentHealth == 0)
+        if (currentHealth == 0)
         {
             Die();
         }
@@ -45,20 +46,20 @@ public class EnemyHealth : MonoBehaviour
 
     private void ApplyKnockback(Vector2 attackerPosition)
     {
-        if(rb == null)
+        if (rb == null)
         {
             return;
         }
 
         Vector2 direction = (rb.position - attackerPosition).normalized;
 
-        if(enemyMovement != null)
+        if (enemyMovement != null)
         {
             enemyMovement.ApplyKnockbackDelay(knockbackDuration);
         }
 
         rb.linearVelocity = Vector2.zero;
-        
+
         rb.AddForce(
             direction * KnockbackForce,
             ForceMode2D.Impulse
@@ -72,16 +73,21 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
-        if(gameScore != null)
+        if (gameScore != null)
         {
             gameScore.AddScore(scoreReward);
         }
 
-        if(enemySpawner != null)
+        if (enemySpawner != null)
         {
             enemySpawner.SpawnEnemy();
         }
 
         Destroy(gameObject);
+    }
+
+    public void SetSpawner(EnemySpawner spawner)
+    {
+        enemySpawner = spawner;
     }
 }
