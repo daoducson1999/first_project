@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     private HealthBarUI healthBarUI;
     [SerializeField]
     private GameManager gameManager;
+
     private int currentHealth;
     private void Awake()
     {
@@ -18,7 +19,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
-        if(healthBarUI != null)
+        if (healthBarUI != null)
         {
             healthBarUI.SetMaxHealth(maxHealth);
         }
@@ -26,28 +27,44 @@ public class PlayerHealth : MonoBehaviour
 
     public void takeDamage(int damage)
     {
-        if(damage <= 0)
+        if (damage <= 0)
         {
             return;
         }
 
         currentHealth = Mathf.Max(currentHealth - damage, 0);
         //Debug.Log("Player Health: " + currentHealth);
-        if(healthBarUI != null)
+        if (healthBarUI != null)
         {
             healthBarUI.SetHealth(currentHealth);
         }
 
-        if(currentHealth == 0)
+        if (currentHealth == 0)
         {
             Die();
+        }
+    }
+
+    public void Heal(int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+
+        currentHealth =
+        Mathf.Min(currentHealth + amount, maxHealth);
+
+        if (healthBarUI != null)
+        {
+            healthBarUI.SetHealth(currentHealth);
         }
     }
 
     private void Die()
     {
         Debug.Log("Player Die!");
-        if(gameManager != null)
+        if (gameManager != null)
         {
             gameManager.GameOver();
         }
