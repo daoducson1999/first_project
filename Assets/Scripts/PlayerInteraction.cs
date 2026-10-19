@@ -64,9 +64,13 @@ public class PlayerInteraction : MonoBehaviour
         if (itemPickup != null)
         {
             Item item = itemPickup.CreateItem();
-            playerInventory.AddItem(item);
-            Debug.Log("Picked up: " + item.ItemName);
-            Destroy(collision.gameObject);
+            if (playerInventory.AddItem(item))
+            {
+                Debug.Log("Picked up: " + item.ItemName);
+                Destroy(collision.gameObject);
+            }
+            else
+                return;
         }
     }
 }
