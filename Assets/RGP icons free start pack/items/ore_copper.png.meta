@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: b5645e72c6125ac43a9874c76283ec98
+AssetOrigin:
+  serializedVersion: 1
+  productId: 245521
+  packageName: RPG icons free starter pack
+  packageVersion: 1.3
+  assetPath: Assets/RGP icons free start pack/items/ore_copper.png
+  uploadId: 939344
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -55,7 +62,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -65,7 +72,9 @@ TextureImporter:
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationMethod: 0
   spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
@@ -213,7 +222,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -232,10 +241,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 245521
-  packageName: RPG icons free starter pack
-  packageVersion: 1.3
-  assetPath: Assets/RGP icons free start pack/items/ore_copper.png
-  uploadId: 939344
