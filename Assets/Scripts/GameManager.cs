@@ -11,13 +11,17 @@ public class GameManager : MonoBehaviour
     private GameScore gameScore;
     [SerializeField]
     private TMP_Text finalScoreText;
+    [SerializeField]
+    private GameObject pauseMenu;
     private bool isGameOver;
+    private bool isPaused;
 
     public void Start()
     {
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
+            pauseMenu.SetActive(false);
         }
     }
 
@@ -54,4 +58,30 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenuScene");
     }
-}
+
+    public void PauseGame()
+    {
+        if(isGameOver) return;
+
+        if(!isPaused)
+        {
+            Time.timeScale = 0f;
+            isPaused = true;
+            pauseMenu.SetActive(true);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            isPaused = false;
+            pauseMenu.SetActive(false);
+        }
+    }
+
+    public void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();
+        }
+    }
+}   

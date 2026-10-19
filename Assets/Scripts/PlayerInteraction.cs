@@ -1,5 +1,7 @@
 using System.Drawing;
+using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -17,14 +19,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             Debug.Log("Hit: " + collision.gameObject.name);
         }
-        // else if(collision.gameObject.CompareTag("Enemy"))
-        // {
-        //     EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
-        //     if(enemyHealth != null)
-        //     {
-        //         enemyHealth.takeDamage(attackDamage);
-        //     }
-        // }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -71,6 +65,18 @@ public class PlayerInteraction : MonoBehaviour
             }
             else
                 return;
+        }
+
+        //3. Xử lý qua cửa
+        if(collision.CompareTag("Door"))
+        {
+            if(playerInventory.FindItem(3) == null)
+            {
+                return;
+            }else
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
         }
     }
 }
