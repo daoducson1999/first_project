@@ -1,5 +1,6 @@
 using System.Runtime.Serialization;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -61,6 +62,11 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public int LoseHealth()
+    {
+        return maxHealth - currentHealth;
+    }
+    
     private void Die()
     {
         Debug.Log("Player Die!");

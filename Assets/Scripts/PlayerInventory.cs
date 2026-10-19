@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Experimental;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
@@ -9,6 +11,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField]
     private InventoryUI inventoryUI;
     private int coinCount;
+    private int maxSlot = 5;
 
     public IReadOnlyList<Item> Items
     {
@@ -38,20 +41,24 @@ public class PlayerInventory : MonoBehaviour
     }
 
 
-    public void AddItem(Item newItem)
+    public bool AddItem(Item newItem)
     {
         Item existingItem = FindItem(newItem.Id);
-
+        int NoOfItem = items.Count;
         if (existingItem != null)
         {
             existingItem.Quantity += newItem.Quantity;
-            //return;
-        }else
+            RefreshUI();
+            return true;
+        }
+        else if(NoOfItem < maxSlot)
         {
             items.Add(newItem);
+            RefreshUI();
+            return true;
         }
 
-        RefreshUI();
+        return false;
     }
 
     public bool RemoveItem(int id, int amount)
@@ -72,13 +79,34 @@ public class PlayerInventory : MonoBehaviour
         return true;
     }
 
+    public bool HasItem(int id, int amount)
+    {
+        if(amount <= 0) return false;
+
+        Item item = FindItem(id);
+        if(item == null) return false;
+        if(item.Quantity < amount)
+            return false;
+        else
+            return true;
+    }
+
     public void UseHealthPotion(PlayerHealth playerHealth)
     {
-        const int healthPotionId = 1;
+        const int healthPotionId = 5;
         bool removed = RemoveItem(healthPotionId, 1);
         if (!removed) return;
 
         playerHealth.Heal(25);
+    }
+
+    public void UseLargeHealthPotion(PlayerHealth playerHealth)
+    {
+        const int healthPotionId = 4;
+        bool removed = RemoveItem(healthPotionId, 1);
+        if (!removed) return;
+
+        playerHealth.Heal(50);
     }
 
     public int CoinCount
