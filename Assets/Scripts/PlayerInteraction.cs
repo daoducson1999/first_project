@@ -66,17 +66,5 @@ public class PlayerInteraction : MonoBehaviour
             else
                 return;
         }
-
-        //3. Xử lý qua cửa
-        if(collision.CompareTag("Door"))
-        {
-            if(playerInventory.FindItem(3) == null)
-            {
-                return;
-            }else
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            }
-        }
     }
 }

@@ -2,18 +2,37 @@ using UnityEngine;
 
 public class PersistentGameManager : MonoBehaviour
 {
-    private static PersistentGameManager instance;
+    public static PersistentGameManager Instance
+    {
+        get;
+        private set;
+    }
+    private int highScore;
+
+    public int HighScore
+    {
+        get {return highScore;}
+    }
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void UpdateHighScore(int currentScore)
+    {
+        if(currentScore > highScore)
+        {
+            highScore = currentScore;
+            Debug.Log("New High Score: " + highScore);
+        }
     }
 
 }

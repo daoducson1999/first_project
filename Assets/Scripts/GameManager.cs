@@ -18,9 +18,16 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
+        Time.timeScale = 1f;
+        isGameOver = false;
+        isPaused = false;
+        
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
+        }
+        if(pauseMenu != null)
+        {
             pauseMenu.SetActive(false);
         }
     }
@@ -50,6 +57,10 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;
+        if(GameSession.Instance != null)
+        {
+            GameSession.Instance.ResetSession();
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -79,6 +90,7 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
+        if(isGameOver) return;
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             PauseGame();
