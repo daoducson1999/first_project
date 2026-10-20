@@ -5,6 +5,10 @@ public class MainMenu : MonoBehaviour
 {
     public void StartGame()
     {
+        if(GameSession.Instance != null)
+        {
+            GameSession.Instance.ResetSession();
+        }
         SceneManager.LoadScene("GameScene");
     }
 

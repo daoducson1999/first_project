@@ -11,7 +11,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField]
     private InventoryUI inventoryUI;
     private int coinCount;
-    private int maxSlot = 5;
+    const int maxSlot = 5;
 
     public IReadOnlyList<Item> Items
     {
@@ -42,18 +42,21 @@ public class PlayerInventory : MonoBehaviour
 
 
     public bool AddItem(Item newItem)
-    {
+    {   
+        if(newItem == null) return false;
         Item existingItem = FindItem(newItem.Id);
         int NoOfItem = items.Count;
         if (existingItem != null)
         {
             existingItem.Quantity += newItem.Quantity;
+            SaveInventory();
             RefreshUI();
             return true;
         }
-        else if(NoOfItem < maxSlot)
+        else if (NoOfItem < maxSlot)
         {
             items.Add(newItem);
+            SaveInventory();
             RefreshUI();
             return true;
         }
@@ -74,18 +77,18 @@ public class PlayerInventory : MonoBehaviour
         {
             items.Remove(item);
         }
-
+        SaveInventory();
         RefreshUI();
         return true;
     }
 
     public bool HasItem(int id, int amount)
     {
-        if(amount <= 0) return false;
+        if (amount <= 0) return false;
 
         Item item = FindItem(id);
-        if(item == null) return false;
-        if(item.Quantity < amount)
+        if (item == null) return false;
+        if (item.Quantity < amount)
             return false;
         else
             return true;
@@ -119,10 +122,12 @@ public class PlayerInventory : MonoBehaviour
 
     private void Start()
     {
+        LoadInventory();
         if (coinCounterUI != null)
         {
             coinCounterUI.SetCoinCount(coinCount);
         }
+        RefreshUI();
     }
 
     public void AddCoin(int amount)
@@ -130,10 +135,32 @@ public class PlayerInventory : MonoBehaviour
         if (amount <= 0) return;
 
         coinCount += amount;
-
+        SaveInventory();
         if (coinCounterUI != null)
         {
             coinCounterUI.SetCoinCount(coinCount);
         }
+    }
+
+    private void LoadInventory()
+    {
+        if (GameSession.Instance == null)
+        {
+            return;
+        }
+
+        coinCount = GameSession.Instance.CoinCount;
+        items = GameSession.Instance.LoadItems();
+    }
+
+    private void SaveInventory()
+    {
+        if (GameSession.Instance == null)
+        {
+            return;
+        }
+
+        GameSession.Instance.CoinCount = coinCount;
+        GameSession.Instance.SaveItems(items);
     }
 }
