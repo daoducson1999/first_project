@@ -10,4 +10,5 @@ public class SaveData
     public ItemSaveData[] items;
     public int coinCount;
     public string sceneName;
+    public string[] remainWorldItemIDs;
 }

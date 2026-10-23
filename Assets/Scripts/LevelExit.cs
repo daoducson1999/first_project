@@ -18,6 +18,7 @@ public class LevelExit : MonoBehaviour
 
         isLoading = true;
         Time.timeScale = 1f;
+        playerInventory.RemoveItem(3,1);
         SceneManager.LoadScene(nextSceneName);
     }
 }
