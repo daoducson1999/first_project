@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Experimental;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
@@ -162,5 +160,62 @@ public class PlayerInventory : MonoBehaviour
 
         GameSession.Instance.CoinCount = coinCount;
         GameSession.Instance.SaveItems(items);
+    }
+
+    public ItemSaveData[] ExportItems()
+    {
+        ItemSaveData[] result = new ItemSaveData[items.Count];
+
+        for(int i = 0; i < items.Count; i++)
+        {
+            ItemSaveData itemData = 
+                new()
+                {
+                    id = items[i].Id,
+                    itemName = items[i].ItemName,
+                    quantity = items[i].Quantity
+                };
+
+            result[i] = itemData;
+        }
+        return result;
+    }
+
+    public void ImportItems(ItemSaveData[] savedItems)
+    {
+        items.Clear();
+
+        if(savedItems == null)
+        {
+            RefreshUI();
+            return;
+        }
+
+        foreach(ItemSaveData savedItem in savedItems)
+        {
+            if(savedItem.quantity <= 0) continue;
+
+            Item item = new(
+                savedItem.id,
+                savedItem.itemName,
+                savedItem.quantity
+            );
+
+            items.Add(item);
+        }
+        SaveInventory();
+        RefreshUI();
+    }
+
+    public void SetCoinCount(int amount)
+    {
+        coinCount = Mathf.Max(amount, 0);
+
+        SaveInventory();
+
+        if(coinCounterUI != null)
+        {
+            coinCounterUI.SetCoinCount(coinCount);
+        }
     }
 }

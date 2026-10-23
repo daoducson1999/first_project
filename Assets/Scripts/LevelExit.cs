@@ -3,19 +3,21 @@ using UnityEngine.SceneManagement;
 
 public class LevelExit : MonoBehaviour
 {
+    private const int KeyItemId = 3;
+
     [SerializeField]
     private string nextSceneName = "Level2Scene";
     private bool isLoading;
-    private PlayerInventory playerInventory;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Player")) return;
-        if (isLoading) return;
-        isLoading = true;
+        if (!collision.CompareTag("Player") || isLoading) return;
 
+        PlayerInventory playerInventory = collision.GetComponent<PlayerInventory>();
+        if (playerInventory == null || !playerInventory.HasItem(KeyItemId, 1)) return;
+
+        isLoading = true;
         Time.timeScale = 1f;
         SceneManager.LoadScene(nextSceneName);
     }
 }
-

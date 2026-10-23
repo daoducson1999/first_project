@@ -13,6 +13,11 @@ public class PlayerHealth : MonoBehaviour
     private GameManager gameManager;
 
     private int currentHealth;
+
+    public int CurrentHealth
+    {
+        get { return currentHealth; }
+    }
     // private void Awake()
     // {
     //     currentHealth = maxHealth;
@@ -103,6 +108,20 @@ public class PlayerHealth : MonoBehaviour
             gameManager.GameOver();
         }
         gameObject.SetActive(false);
+    }
+
+    public void SetHealth(int health)
+    {
+        currentHealth = Mathf.Clamp(health, 0, maxHealth);
+        SaveHealth();
+        if(healthBarUI != null)
+        {
+            healthBarUI.SetHealth(currentHealth);
+        }
+        if(currentHealth == 0 && gameObject.activeSelf)
+        {
+            Die();
+        }
     }
 
 }

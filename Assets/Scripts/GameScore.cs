@@ -31,21 +31,9 @@ public class GameScore : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        if (amount <= 0)
-        {
-            return;
-        }
-
+        if(amount <= 0) return;
         score += amount;
-        if (GameSession.Instance != null)
-        {
-            GameSession.Instance.Score = score;
-        }
-        if(PersistentGameManager.Instance != null)
-        {
-            PersistentGameManager.Instance.UpdateHighScore(score);
-        }
-        UpdateUI();
+        SetScore(score + amount);
     }
 
     private void UpdateUI()
@@ -54,5 +42,20 @@ public class GameScore : MonoBehaviour
         {
             scoreUI.SetScore(score);
         }
+    }
+
+    public void SetScore(int value)
+    {
+        score = Mathf.Max(value, 0);
+        if(GameSession.Instance != null)
+        {
+            GameSession.Instance.Score = score;
+        }
+
+        if(PersistentGameManager.Instance != null)
+        {
+            PersistentGameManager.Instance.UpdateHighScore(score);
+        }
+        UpdateUI();
     }
 }
