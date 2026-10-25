@@ -101,12 +101,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7498368150466457809}
-  - component: {fileID: 3107797199828254035}
   - component: {fileID: 8492751102546085683}
   - component: {fileID: 4250114550419742531}
   - component: {fileID: 8626317663264538479}
   - component: {fileID: 545002848485665858}
   - component: {fileID: 4353212705059403885}
+  - component: {fileID: 3121446385376000354}
   m_Layer: 7
   m_Name: FastEnemy
   m_TagString: Enemy
@@ -130,20 +130,6 @@ Transform:
   - {fileID: 6575415191585948689}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3107797199828254035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4807409236257569176}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 119d3458ddd7c1d4498b4b60fddb861f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  enemyType: Goblin
-  damage: 40
 --- !u!50 &8492751102546085683
 Rigidbody2D:
   serializedVersion: 5
@@ -261,3 +247,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombat
   damage: 5
   attackCooldown: 0.5
+--- !u!114 &3121446385376000354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4807409236257569176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2c08823d6ade14ba9f241e33f1abde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
+  player: {fileID: 0}
+  chaseRange: 6
+  attackRange: 1.5
+  pointAOffset: {x: 0, y: 0}
+  pointBOffset: {x: 0, y: -4}
+  patrolSpeed: 1.5
