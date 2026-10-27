@@ -154,6 +154,18 @@ public class EnemyAI : MonoBehaviour
             Vector3.forward,
             attackRange
         );
+
+        if(pointA != null && pointB != null)
+        {
+            Gizmos.color = Color.green;
+
+            Gizmos.DrawLine(
+                pointA,
+                pointB
+            );
+
+            
+        }
     }
 #endif
 }

@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   player: {fileID: 0}
   chaseRange: 6
-  attackRange: 1.5
+  attackRange: 3
   pointAOffset: {x: 0, y: 0}
   pointBOffset: {x: 0, y: -4}
   patrolSpeed: 1.5
