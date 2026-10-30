@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     private TMP_Text finalScoreText;
     [SerializeField]
     private GameObject pauseMenu;
+    [SerializeField] private NetworkManager networkManager;
+    [SerializeField] private GameObject player;
     private bool isGameOver;
     private bool isPaused;
 
@@ -21,12 +23,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         isGameOver = false;
         isPaused = false;
-        
+
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
         }
-        if(pauseMenu != null)
+        if (pauseMenu != null)
         {
             pauseMenu.SetActive(false);
         }
@@ -35,29 +37,28 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         if (isGameOver) return;
-
         isGameOver = true;
+        isPaused = false;
 
-        if (gameScore != null && finalScoreText != null)
+        if (
+        gameScore != null &&
+        finalScoreText != null &&
+        networkManager != null &&
+        player != null
+        )
         {
-            finalScoreText.SetText(
-            "Final Score: {0:0}",
-            gameScore.Score
-            );
+            finalScoreText.SetText("Final Score: {0:0}", gameScore.Score);
+            networkManager.SendScore(player.name, gameScore.Score);
         }
-
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true);
-        }
-
+        if (gameOverPanel != null) gameOverPanel.SetActive(true);
+        if (pauseMenu != null) pauseMenu.SetActive(false);
         Time.timeScale = 0f;
     }
 
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        if(GameSession.Instance != null)
+        if (GameSession.Instance != null)
         {
             GameSession.Instance.ResetSession();
         }
@@ -72,9 +73,9 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
-        if(isGameOver) return;
+        if (isGameOver) return;
 
-        if(!isPaused)
+        if (!isPaused)
         {
             Time.timeScale = 0f;
             isPaused = true;
@@ -90,10 +91,10 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if(isGameOver) return;
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (isGameOver) return;
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             PauseGame();
         }
     }
-}   
+}
