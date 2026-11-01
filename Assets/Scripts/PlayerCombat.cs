@@ -19,6 +19,7 @@ public class PlayerCombat : MonoBehaviour
     private int circleSegments = 60;
     [SerializeField]
     private float attackPointDistance = 1f;
+    [SerializeField] private Animator animator;
     private Vector2 lastMoveDirection = Vector2.right;
 
     private void Start()
@@ -39,20 +40,38 @@ public class PlayerCombat : MonoBehaviour
 
     private void Attack()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(
-            attackPoint.position,
-            attackRange,
-            enemyLayer
+        if (animator != null)
+        {
+            animator.SetBool("isAttacking", true);
+            animator.SetTrigger("Attack");
+        }
+
+        Collider2D[] hits =
+        Physics2D.OverlapCircleAll(
+        attackPoint.position,
+        attackRange,
+        enemyLayer
         );
 
         foreach (Collider2D hit in hits)
         {
-            EnemyHealth enemyHealth = hit.GetComponent<EnemyHealth>();
+            EnemyHealth enemyHealth =
+            hit.GetComponent<EnemyHealth>();
+
             if (enemyHealth != null)
             {
                 enemyHealth.takeDamage(attackDamage, transform.position);
             }
         }
+    }
+
+    public void EndAttackAnimation()
+    {
+        if(animator != null)
+        {
+            animator.SetBool("isAttacking", false);
+        }
+
     }
 
     private void OnDrawGizmosSelected()
@@ -104,7 +123,7 @@ public class PlayerCombat : MonoBehaviour
             vertical
         );
 
-        if(moveDirection != Vector2.zero)
+        if (moveDirection != Vector2.zero)
         {
             lastMoveDirection = moveDirection.normalized;
         }
