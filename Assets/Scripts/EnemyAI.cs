@@ -12,22 +12,22 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private Vector2 pointAOffset = new Vector2(-2f, 0f);
     [SerializeField] private Vector2 pointBOffset = new Vector2(2f, 0f);
-    [SerializeField] private float patrolSpeed = 2f;
+    [SerializeField] public float patrolSpeed = 2f;
     private EnemyState currentState = EnemyState.Patrol;
-    private Vector2 pointA;
-    private Vector2 pointB;
-    private bool movingToPointA;
+    public Vector2 pointA;
+    public Vector2 pointB;
+    public bool movingToPointA;
     public bool IsChasing => currentState == EnemyState.Chase;
+    public bool IsPatrol => currentState == EnemyState.Patrol;
     private EnemyCombat enemyCombat;
     public Transform Player => player;
+    public float AttackRange => attackRange;
+    public float ChaseRange => chaseRange;
 
     private void Awake()
     {
         enemyCombat = GetComponent<EnemyCombat>();
-        pointA = (Vector2)transform.position + pointAOffset;
-        pointB = (Vector2)transform.position + pointBOffset;
-        movingToPointA = Vector2.Distance(transform.position, pointA)
-            <= Vector2.Distance(transform.position, pointB);
+        
 
         if(player == null)
         {
@@ -51,20 +51,20 @@ public class EnemyAI : MonoBehaviour
 
     private void HandlePatrol()
     {   
-        Vector2 patrolTarget = movingToPointA ? pointA : pointB;
+        // Vector2 patrolTarget = movingToPointA ? pointA : pointB;
      
-        Vector2 nextPosition = Vector2.MoveTowards(
-            transform.position,
-            patrolTarget,
-            patrolSpeed * Time.deltaTime
-        );
+        // Vector2 nextPosition = Vector2.MoveTowards(
+        //     transform.position,
+        //     patrolTarget,
+        //     patrolSpeed * Time.deltaTime
+        // );
 
-        transform.position = new Vector3(nextPosition.x, nextPosition.y, transform.position.z);
+        // transform.position = new Vector3(nextPosition.x, nextPosition.y, transform.position.z);
 
-        if (Vector2.Distance(transform.position, patrolTarget) <= 0.05f)
-        {
-            movingToPointA = !movingToPointA;
-        }
+        // if (Vector2.Distance(transform.position, patrolTarget) <= 0.05f)
+        // {
+        //     movingToPointA = !movingToPointA;
+        // }
     }
 
     private void HandleChase()
@@ -139,33 +139,5 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
     }
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        UnityEditor.Handles.color = Color.yellow;
-        UnityEditor.Handles.DrawWireDisc(
-            transform.position,
-            Vector3.forward,
-            chaseRange
-        );
-        UnityEditor.Handles.color = Color.red;
-        UnityEditor.Handles.DrawWireDisc(
-            transform.position,
-            Vector3.forward,
-            attackRange
-        );
 
-        if(pointA != null && pointB != null)
-        {
-            Gizmos.color = Color.green;
-
-            Gizmos.DrawLine(
-                pointA,
-                pointB
-            );
-
-            
-        }
-    }
-#endif
 }
